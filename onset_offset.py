@@ -10,9 +10,11 @@ Created on Wed Jun 16 15:14:27 2021
 # Roenneberg sleep determination algorithm (MASDA)
 
 import pandas as pd
-import os, sys
+import numpy as np
+import scipy
+import matplotlib.pyplot as plt
 
-def onset_offset_identifier(label):
+def onset_offset_identifier(label, output, diurnal):
 
     df = pd.read_csv(label+' Roenneberg.csv')
     file = open(label+' Onsets+Offsets.csv', 'w')
@@ -64,6 +66,43 @@ def onset_offset_identifier(label):
                         offdate = df['DATE'][1440*i+j+k]
                         offtime = df['TIME'][1440*i+j+k]
                         offtime = ((j/60.0 + 12) % 24) + (k/60.0)
+            
         file.write(str(df.loc[i*1440]['DATE'])+','+str(i+1)+','+str(ondate)+','+str(ontime)+','+str(onhour)+','+str(offdate)+','+str(offtime)+','+str(offhour)+'\n')
-                
+    
     file.close()
+    
+    # For sleep onset times:
+    # plot data with line of best fit
+    metric = "Sleep Onset"
+    df_ = pd.read_csv(label + " Onsets+Offsets.csv")
+    df_.dropna(inplace=True)
+    x = df_["DAY"]
+    y = df_["ONSET_HOUR"]
+    m, b = np.polyfit(x, y, 1)
+    plt.plot(x, y, "o")
+    plt.plot(x, m*x + b)
+    plt.xlabel("Day")
+    plt.ylabel(metric)
+    plt.savefig(label + " Images/" + label + " " + metric + ".png")
+    plt.clf()
+    
+    # calculate and output correlation
+    r, p = scipy.stats.pearsonr(x, y)
+    output.write(metric + "," + str(r) + "," + str(p) + "\n")
+    
+    # For sleep offset times:
+    metric = "Sleep Offset"
+    x = df_["DAY"]
+    y = df_["OFFSET_HOUR"]
+    m, b = np.polyfit(x, y, 1)
+    plt.plot(x, y, "o")
+    plt.plot(x, m*x + b)
+    plt.xlabel("Day")
+    plt.ylabel(metric)
+    plt.savefig(label + " Images/" + label + " " + metric + ".png")
+    plt.clf()
+    
+    r, p = scipy.stats.pearsonr(x, y)
+    output.write(metric + "," + str(r) + "," + str(p) + "\n")
+    
+    print("Onsets/offsets completed")

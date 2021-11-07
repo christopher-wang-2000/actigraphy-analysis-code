@@ -11,7 +11,7 @@ def awd_converter(label, df):
     file = open(label + ".AWD", "w")
     
     file.write(label+"\n") # ID
-    startdate = df.iloc[0]["DATE"]
+    startdate = df.iloc[0][df.columns[0]]
     startday = startdate.split('/')[0]
     startmonth = startdate.split('/')[1]
     startyear = startdate.split('/')[2]
@@ -23,6 +23,7 @@ def awd_converter(label, df):
     file.write("1\n") # filler text for misc. information fields
     file.write("1\n")
     file.write("1\n")
-    df[["PIM"]].to_csv(file, index=False, header=None) # write activity data
+    df[df.columns[2]].to_csv(file, index=False, header=None) # write activity data
     
+    print("AWD conversion completed")
     file.close()

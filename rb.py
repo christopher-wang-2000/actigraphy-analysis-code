@@ -34,4 +34,5 @@ def rb_calculator(label, df):
     blankdf['WAKE'] = rest.values[0:len(blankdf['TIME'])]
     blankdf.to_csv(file, index=False, header=None)
     
+    print("Roenneberg (MASDA) completed")
     file.close()

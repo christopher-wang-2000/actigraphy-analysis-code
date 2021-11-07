@@ -33,4 +33,5 @@ def ck_calculator(label, df):
     blankdf['WAKE'] = rest.values[0:len(blankdf['TIME'])]
     blankdf.to_csv(file, index=False, header=None)
     
+    print("Cole-Kripke completed")
     file.close()

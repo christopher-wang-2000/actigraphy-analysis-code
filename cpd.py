@@ -7,17 +7,20 @@ Created on Tue Jun 22 10:53:46 2021
 """
 
 import pandas as pd
-import os, sys
 import numpy as np
 import math
+import scipy
+import matplotlib.pyplot as plt
 
-def cpd_calculator(label):
-
+def cpd_calculator(label, output):
+    
+    metric = "CPD"
+    
     df = pd.read_csv(label+' Midsleep.csv')
     total = 0
     count = 0
 
-    file = open(label+' CPD.csv', 'w')
+    file = open(label+' '+metric+'.csv', 'w')
     file.write("DAY,dREF,dDD,CPD\n")
 
     for i in range(len(df)):
@@ -36,6 +39,24 @@ def cpd_calculator(label):
             
         else:
             file.write(str(i+1)+',N/A,N/A,N/A\n')
-
+    
     file.close()
-            
+    
+    # plot data with line of best fit
+    df_ = pd.read_csv(label + " " + metric + ".csv")
+    df_.dropna(inplace=True)
+    x = df_["DAY"]
+    y = df_[metric]
+    m, b = np.polyfit(x, y, 1)
+    plt.plot(x, y, "o")
+    plt.plot(x, m*x + b)
+    plt.xlabel("Day")
+    plt.ylabel(metric)
+    plt.savefig(label + " Images/" + label + " " + metric + ".png")
+    plt.clf()
+    
+    # calculate and output correlation
+    r, p = scipy.stats.pearsonr(x, y)
+    output.write(metric + "," + str(r) + "," + str(p) + "\n")
+    
+    print("CPD completed")
