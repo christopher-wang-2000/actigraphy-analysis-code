@@ -21,6 +21,9 @@ elif (path == "2"):
     clocklab = True
 elif (path == "3"):
     custom = True
+    datelabel = input("What is the name of the column containing the dates? ")
+    timelabel = input("What is the name of the column containing the times of day? ")
+    actlabel = input("What is the name of the column containing the activity data? ")
     path = input("What is the date format? Enter 1 for DD/MM/YYYY, 2 for DD/MM/YY, 3 for MM/DD/YYYY, 4 for MM/DD/YY, 5 for YYYY/MM/DD, or add 5 to any of these values if the separator is a hyphen instead of a slash: ")
     if (path == "1"):
         dateformat = "%d/%m/%Y"
@@ -45,9 +48,6 @@ elif (path == "3"):
     else:
         print("Invalid input. Please restart the program.")
         sys.exit()
-    datelabel = input("What is the name of the column containing the dates? ")
-    timelabel = input("What is the name of the column containing the times of day? ")
-    actlabel = input("What is the name of the column containing the activity data? ")
 else:
     print("Invalid input. Please restart the program.")
     sys.exit()
