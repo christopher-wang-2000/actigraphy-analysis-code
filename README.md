@@ -41,5 +41,6 @@ USAGE INSTRUCTIONS:
 4) For each data file, the code will automatically calculate all the metrics, along with correlations, p-values, and scatterplots, and export them to a newly created folder inside the folder containing the date.
 
 If you encounter any errors, please email me at christopher.wang@wustl.edu letting me know what the error is, along with a sample data file that reproduces the error.
+If you receive an error that says "KeyError" and you are using a custom file format, double-check that you are entering the column titles correctly.
 
 Additionally, this code only works for data with 1-minute bins for activity counts. If you want to analyze data with a different bin size, please email me letting me know what bin size you would like, along with a sample data file so that I can test the program after editing it.
