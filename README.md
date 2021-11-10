@@ -7,7 +7,7 @@ The program takes in a input .csv file containing data with the following column
 This program can also take in .csv files containing Graph Data exported from ClockLab or .csv files with different names/orders of columns and different date formats.
 This code was written in Python 3.8.1.
 
-This code also uses the pyActigraphy library developed by Gregory Hammad (https://github.com/ghammad/pyActigraphy) to determine sleep and wake states at each timepoint using the MASDA (Roenneberg) and Cole-Kripke algorithms.
+This code also uses the pyActigraphy library developed by Gregory Hammad (https://github.com/ghammad/pyActigraphy) to determine sleep and wake states at each timepoint using the MASDA (Roenneberg) and Cole-Kripke algorithms. Publication on pyActigraphy: https://pubmed.ncbi.nlm.nih.gov/34665807/ (Hammad et al. 2021)
 
 This code currently calculates the following circadian rhythm metrics:
 - M10
@@ -24,6 +24,13 @@ This code currently calculates the following circadian rhythm metrics:
 - Composite phase deviation (CPD)
 
 Note: This code calculates CPD by using the mean midsleep over all days, not just free days.
+
+References for sleep metric calculations:
+- "Circadian rest-activity rhythm disturbances in Alzheimer's disease" - van Someren et al. (1996)
+- "A novel method to visualise and quantify circadian misalignment" - Fischer, Vetter, Roenneberg (2016)
+- "Irregular sleep/wake patterns are associated with poorer academic performance and delayed circadian and sleep/wake timing" - Phillips et al. (2017)
+- "Measuring sleep regularity: theoretical properties and practical usage of existing metrics" - Fischer, Klerman, Phillips (2021)
+- "pyActigraphy: Open-source python package for actigraphy data visualization and analysis" - Hammad et al. (2021)
 
 USAGE INSTRUCTIONS:
 
