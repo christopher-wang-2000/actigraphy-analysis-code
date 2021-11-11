@@ -45,6 +45,8 @@ USAGE INSTRUCTIONS:
 - Bin size (number of days) for multi-day metrics (IS, SRI)
 - Name of the folder containing the data files
 
+Sample data files are provided in the folders. The human test data is already in the default format (1), but it can also be run by using a custom format (3) and inputting DATE, TIME, and PIM for the column names and 1 for the date format (DD/MM/YYYY). The ClockLab data (exported by exporting Graph Data) can be analyzed by inputting 2 when the program prompts for data format.
+
 4) For each data file, the code will automatically calculate all the metrics, along with correlations, p-values, and scatterplots, and export them to a newly created folder inside the folder containing the date.
 
 If you encounter any errors, please email me at christopher.wang@wustl.edu letting me know what the error is, along with a sample data file that reproduces the error.
