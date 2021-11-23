@@ -34,16 +34,21 @@ def onset_offset_identifier(label, output, diurnal):
         tempontime = 'N/A'
         temponhour = 'N/A'
         if ((sum(df['SLEEP'][1440*i:1440*(i+1)])>0) & (sum(df['SLEEP'][1440*i:1440*(i+1)])<1440)):
-            for j in range(1440):
+            for j in range(1440): # loop through each day
                 if (bout & (df['SLEEP'][1440*i+j]==1)):
-                    boutlength = boutlength + 1
+                    boutlength = boutlength + 1 # extending current sleep bout
                 elif ((not bout) & (df['SLEEP'][1440*i+j]==1)):
+                    # start a new sleep bout
                     bout = True
                     boutlength = 1
                     tempondate = df['DATE'][1440*i+j]
                     tempontime = df['TIME'][1440*i+j]
-                    temponhour = (j/60.0 + 12) % 24
+                    if (diurnal):
+                        temponhour = (j/60.0 + 12) # can extend beyond 24
+                    else:
+                        temponhour = (j/60.0 + 12) % 24
                 elif (bout & (df['SLEEP'][1440*i+j]==0)):
+                    # end a sleep bout
                     if (boutlength > maxbout):
                         maxbout = boutlength
                         ondate = tempondate
@@ -51,10 +56,15 @@ def onset_offset_identifier(label, output, diurnal):
                         onhour = temponhour
                         offdate = df['DATE'][1440*i+j]
                         offtime = df['TIME'][1440*i+j]
-                        offhour = (j/60.0 + 12) % 24
+                        if (diurnal):
+                            offhour = (j/60.0 + 12) % 24
+                        else:
+                            offhour = (j/60.0 + 12) # can extend beyond 24
                     bout = False
                     boutlength = 0
                 if ((j==1439) & bout):
+                    # count a sleep bout as long as it starts within the 24-h period
+                    # even if it ends afterward
                     k = 0
                     while ((1440*i+j+k<len(df)-1) & (df['SLEEP'][1440*i+j+k]==1)):
                         k = k+1
@@ -65,7 +75,7 @@ def onset_offset_identifier(label, output, diurnal):
                         ontime = tempontime
                         offdate = df['DATE'][1440*i+j+k]
                         offtime = df['TIME'][1440*i+j+k]
-                        offtime = ((j/60.0 + 12) % 24) + (k/60.0)
+                        offtime = (j/60.0 + 12) + (k/60.0)
             
         file.write(str(df.loc[i*1440]['DATE'])+','+str(i+1)+','+str(ondate)+','+str(ontime)+','+str(onhour)+','+str(offdate)+','+str(offtime)+','+str(offhour)+'\n')
     
