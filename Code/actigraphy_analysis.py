@@ -134,6 +134,7 @@ for filename in fileList:
         df2 = df2.reset_index(drop=True)
     
     # obtain filtered days for IV/M10/IS dataframe
+    filtereddays = []
     if (usefilter):
         threshold = 0.1
         filtereddays = activity_filter.filter_days(df1, threshold)
