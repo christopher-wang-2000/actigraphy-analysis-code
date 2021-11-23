@@ -75,6 +75,8 @@ else:
 path = input("For IV/M10/IS calculations, do you want to filter out days with little or no activity (<10% of mean)? If so, enter Y.")
 if (path == "Y" or path == "y" or path == "Yes" or path == "yes"):
     usefilter = True
+else:
+    usefilter = False
 
 # prompts user for input: folder name containing files to be analyzed
 path = input("Enter the name of the folder containing .csv files to be analyzed: ")
@@ -132,7 +134,7 @@ for filename in fileList:
         df2 = df2.reset_index(drop=True)
     
     # obtain filtered days for IV/M10/IS dataframe
-    if (usefilter)
+    if (usefilter):
         threshold = 0.1
         filtereddays = activity_filter.filter_days(df1, threshold)
     
