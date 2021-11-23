@@ -14,7 +14,7 @@ import numpy as np
 import scipy
 import matplotlib.pyplot as plt
 
-def m10_calculator(label, df, output):
+def m10_calculator(label, df, output, filtereddays):
 
     metric = "M10"
     
@@ -25,19 +25,23 @@ def m10_calculator(label, df, output):
     hourarray = [0]*24
     meanarray = [0]*15
     m10 = 0
+    daynumber = 0
     
     for i in range(len(df)):
-        hourmean = hourmean + float(df.loc[i][df.columns[2]])
-        if (i % 60 == 59):
-            hourarray[(i % 1440)//60] = hourmean/60
-            hourmean = 0
+        if (daynumber not in filtereddays):
+            hourmean = hourmean + float(df.loc[i][df.columns[2]])
+            if (i % 60 == 59):
+                hourarray[(i % 1440)//60] = hourmean/60
+                hourmean = 0
+            if (i % 1440 == 1439): # write one M10 value per day
+                for j in range(15):
+                    meanarray[j] = sum(hourarray[j:j+10])/10
+                m10 = max(meanarray)
+                file.write(df.loc[i-1439][df.columns[0]]+","+str(daynumber)+","+str(m10)+"\n")
+                hourarray = [0]*24
+                meanarray = [0]*15
         if (i % 1440 == 1439):
-            for j in range(15):
-                meanarray[j] = sum(hourarray[j:j+10])/10
-            m10 = max(meanarray)
-            file.write(df.loc[i-1439][df.columns[0]]+","+str(i//1440+1)+","+str(m10)+"\n")
-            hourarray = [0]*24
-            meanarray = [0]*15
+            daynumber += 1
     
     file.close()
     

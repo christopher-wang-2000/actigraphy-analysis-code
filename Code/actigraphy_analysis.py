@@ -7,7 +7,8 @@ Actigraphy Analysis Code
 
 import pandas as pd
 import os, sys
-import clocklab_converter, custom_converter, iv, m10, is_calc, awd, rb, ck, sri, onset_offset, total_sleep, midsleep, sleep_bout_calculator, cpd
+import clocklab_converter, custom_converter, iv, m10, is_calc, awd, rb, ck, sri
+import onset_offset, total_sleep, midsleep, sleep_bout_calculator, cpd, activity_filter
 
 default = False;
 clocklab = False;
@@ -70,6 +71,11 @@ else:
     print("Unrecognized input. Using default bin size of 7 days.")
     binsize = 7
 
+# prompts user for whether to set a threshold
+path = input("For IV/M10/IS calculations, do you want to filter out days with little or no activity (<10% of mean)? If so, enter Y.")
+if (path == "Y" or path == "y" or path == "Yes" or path == "yes"):
+    usefilter = True
+
 # prompts user for input: folder name containing files to be analyzed
 path = input("Enter the name of the folder containing .csv files to be analyzed: ")
 if not path.endswith('/'):
@@ -124,7 +130,12 @@ for filename in fileList:
     while(not (str(int(df2.iloc[0,1].split(':')[0]))+':'+df2.iloc[0,1].split(':')[1] == df2start)):
         df2 = df2.drop([0])
         df2 = df2.reset_index(drop=True)
-        
+    
+    # obtain filtered days for IV/M10/IS dataframe
+    if (usefilter)
+        threshold = 0.1
+        filtereddays = activity_filter.filter_days(df1, threshold)
+    
     # open output file for correlations and p-values
     output = open(label + " Statistics.csv", "w")
     output.write("Metric,Pearson's Correlation (r),p-value\n")
@@ -132,9 +143,9 @@ for filename in fileList:
     # run all analyses on each given file
     # IV, M10, and IS are calculated to include the entire window of the active period
     # sleep metrics are calculated to include the entire window of the sleep period
-    iv.iv_calculator(label, df1, output)
-    m10.m10_calculator(label, df1, output)
-    is_calc.is_calculator(label, df1, output, binsize)
+    iv.iv_calculator(label, df1, output, filtereddays)
+    m10.m10_calculator(label, df1, output, filtereddays)
+    is_calc.is_calculator(label, df1, output, binsize, filtereddays)
     awd.awd_converter(label, df2)
     rb.rb_calculator(label, df2)
     ck.ck_calculator(label, df2)

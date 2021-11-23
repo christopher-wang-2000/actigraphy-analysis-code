@@ -14,7 +14,7 @@ import numpy as np
 import scipy
 import matplotlib.pyplot as plt
 
-def iv_calculator(label, df, output):
+def iv_calculator(label, df, output, filtereddays):
 
     metric = "IV"
     
@@ -22,18 +22,19 @@ def iv_calculator(label, df, output):
     file.write("DATE,DAY,IV\n")
     
     for i in range(len(df)//1440):
-        daymean = sum(df[df.columns[2]][i*1440:(i+1)*1440])/1440
-        numerator = 0
-        denominator = 0
-        for j in range(1,1440):
-            numerator = numerator + (df[df.columns[2]][i*1440+j]-df[df.columns[2]][i*1440+j-1])*(df[df.columns[2]][i*1440+j]-df[df.columns[2]][i*1440+j-1])
-            denominator = denominator + (daymean - df[df.columns[2]][i*1440+j])*(daymean - df[df.columns[2]][i*1440+j])
-        numerator = numerator * 1440
-        denominator = denominator * 1439
-        iv = 0
-        if (denominator != 0):
-            iv = numerator/denominator
-        file.write(df.loc[i*1440][df.columns[0]]+","+str(i+1)+","+str(iv)+"\n")
+        if (i not in filtereddays):
+            daymean = sum(df[df.columns[2]][i*1440:(i+1)*1440])/1440
+            numerator = 0
+            denominator = 0
+            for j in range(1,1440):
+                numerator = numerator + (df[df.columns[2]][i*1440+j]-df[df.columns[2]][i*1440+j-1])*(df[df.columns[2]][i*1440+j]-df[df.columns[2]][i*1440+j-1])
+                denominator = denominator + (daymean - df[df.columns[2]][i*1440+j])*(daymean - df[df.columns[2]][i*1440+j])
+            numerator = numerator * 1440
+            denominator = denominator * 1439
+            iv = 0
+            if (denominator != 0):
+                iv = numerator/denominator
+            file.write(df.loc[i*1440][df.columns[0]]+","+str(i+1)+","+str(iv)+"\n")
     
     file.close()
     
