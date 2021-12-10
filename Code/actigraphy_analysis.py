@@ -14,6 +14,16 @@ default = False;
 clocklab = False;
 custom = False;
 
+# prompts user for input: folder name containing files to be analyzed
+path = input("Enter the name of the folder containing .csv files to be analyzed: ")
+if not path.endswith('/'):
+    path = path + "/"
+os.chdir("../"+path)
+fileList = os.listdir()
+fileList = [i for i in fileList if ".csv" in i]
+fileList.sort()
+print(fileList) # prints list of .csv files to be processed
+
 # prompts user for input: data file format
 path = input("What format is your data in? Enter 1 for default format (DD/MM/YYYY Date, Time, Activity), 2 for Clocklab Graph Data, 3 for data with custom columns: ")
 if (path == "1"):
@@ -21,6 +31,10 @@ if (path == "1"):
 elif (path == "2"):
     clocklab = True
 elif (path == "3"):
+    df = pd.read_csv(fileList[0])
+    print()
+    print("Column names:")
+    print(df.columns.values)
     custom = True
     datelabel = input("What is the name of the column containing the dates? ")
     timelabel = input("What is the name of the column containing the times of day? ")
@@ -72,21 +86,11 @@ else:
     binsize = 7
 
 # prompts user for whether to set a threshold
-path = input("For IV/M10/IS calculations, do you want to filter out days with little or no activity (<10% of mean)? If so, enter Y.")
+path = input("For IV/M10/IS calculations, do you want to filter out days with little or no activity (<10% of mean)? If so, enter Y. ")
 if (path == "Y" or path == "y" or path == "Yes" or path == "yes"):
     usefilter = True
 else:
     usefilter = False
-
-# prompts user for input: folder name containing files to be analyzed
-path = input("Enter the name of the folder containing .csv files to be analyzed: ")
-if not path.endswith('/'):
-    path = path + "/"
-os.chdir("../"+path)
-fileList = os.listdir()
-fileList = [i for i in fileList if ".csv" in i]
-fileList.sort()
-print(fileList) # prints list of .csv files to be processed
 
 for filename in fileList:
     
