@@ -47,18 +47,19 @@ def sri_calculator(label, output, binsize):
     # plot data with line of best fit
     df_ = pd.read_csv(label + " " + metric + ".csv")
     df_.dropna(inplace=True)
-    x = df_["DAY"]
-    y = df_[metric]
-    m, b = np.polyfit(x, y, 1)
-    plt.plot(x, y, "o")
-    plt.plot(x, m*x + b)
-    plt.xlabel("Day")
-    plt.ylabel(metric)
-    plt.savefig(label + " Images/" + label + " " + metric + ".png")
-    plt.clf()
-    
-    # calculate and output correlation
-    r, p = scipy.stats.pearsonr(x, y)
-    output.write(metric + "," + str(r) + "," + str(p) + "\n")
+    if (len(df_) >= 2):
+        x = df_["DAY"]
+        y = df_[metric]
+        m, b = np.polyfit(x, y, 1)
+        plt.plot(x, y, "o")
+        plt.plot(x, m*x + b)
+        plt.xlabel("Day")
+        plt.ylabel(metric)
+        plt.savefig(label + " Images/" + label + " " + metric + ".png")
+        plt.clf()
+        
+        # calculate and output correlation
+        r, p = scipy.stats.pearsonr(x, y)
+        output.write(metric + "," + str(r) + "," + str(p) + "\n")
     
     print("SRI completed")
