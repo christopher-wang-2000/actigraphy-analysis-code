@@ -27,7 +27,6 @@ def rb_calculator(label, df):
     raw.mask_inactivity = True
     
     rest = raw.Roenneberg()
-    
     blankdf = pd.DataFrame()
     blankdf['DATE'] = df['DATE']
     blankdf['TIME'] = df['TIME']

@@ -7,12 +7,14 @@ Actigraphy Analysis Code
 
 import pandas as pd
 import os, sys
-import clocklab_converter, custom_converter, iv, m10, is_calc, awd, rb, ck, sri
+import clocklab_converter, custom_converter, iv, m10, is_calc, awd, rb, ck, sadeh, sri
 import onset_offset, total_sleep, midsleep, sleep_bout_calculator, cpd, activity_filter
 
 default = False;
 clocklab = False;
 custom = False;
+sri_mode = ""
+ts_mode = ""
 
 # prompts user for input: folder name containing files to be analyzed
 path = input("Enter the name of the folder containing .csv files to be analyzed: ")
@@ -73,6 +75,30 @@ if (path == "D"):
     diurnal = True
 elif (path == "N"):
     diurnal = False
+else:
+    print("Invalid input. Please restart the program.")
+    sys.exit()
+
+# prompts user for sleep algorithm for SRI/total sleep calculations
+path = input("For SRI calculations, which sleep algorithm do you want to use? Input 1 for Roenneberg (MASDA), 2 for Cole-Kripke, or 3 for Sadeh. ")
+if (path == "1"):
+    sri_mode = "R"
+elif (path == "2"):
+    sri_mode = "CK"
+elif (path == "3"):
+    sri_mode = "S"
+else:
+    print("Invalid input. Please restart the program.")
+    sys.exit()
+
+# prompts user for sleep algorithm for SRI/total sleep calculations
+path = input("For total sleep calculations, which sleep algorithm do you want to use? Input 1 for Roenneberg (MASDA), 2 for Cole-Kripke, or 3 for Sadeh. ")
+if (path == "1"):
+    ts_mode = "R"
+elif (path == "2"):
+    ts_mode = "CK"
+elif (path == "3"):
+    ts_mode = "S"
 else:
     print("Invalid input. Please restart the program.")
     sys.exit()
@@ -150,15 +176,16 @@ for filename in fileList:
     # run all analyses on each given file
     # IV, M10, and IS are calculated to include the entire window of the active period
     # sleep metrics are calculated to include the entire window of the sleep period
-    iv.iv_calculator(label, df1, output, filtereddays)
-    m10.m10_calculator(label, df1, output, filtereddays)
-    is_calc.is_calculator(label, df1, output, binsize, filtereddays)
+    #iv.iv_calculator(label, df1, output, filtereddays)
+    #m10.m10_calculator(label, df1, output, filtereddays)
+    #is_calc.is_calculator(label, df1, output, binsize, filtereddays)
     awd.awd_converter(label, df2)
     rb.rb_calculator(label, df2)
     ck.ck_calculator(label, df2)
-    sri.sri_calculator(label, output, binsize)
+    sadeh.sadeh_calculator(label, df2)
+    sri.sri_calculator(label, output, binsize, sri_mode)
     onset_offset.onset_offset_identifier(label, output, diurnal)
-    total_sleep.total_sleep_calculator(label, output)
+    total_sleep.total_sleep_calculator(label, output, ts_mode)
     midsleep.midsleep_identifier(label, output)
     sleep_bout_calculator.sleep_bout_calculator(label, output)
     cpd.cpd_calculator(label, output)

@@ -6,22 +6,30 @@ Created on Mon Jun 21 16:35:14 2021
 @author: chriswang
 """
 
-# Calculates the total amount of sleep each day based on the onsets and
-# offsets determined from the results of the Roenneberg algorithm
+# Calculates the total amount of sleep each day based a particular sleep
+# algorithm.
 
 import pandas as pd
 import numpy as np
 import scipy
 import matplotlib.pyplot as plt
 
-def total_sleep_calculator(label, output):
+def total_sleep_calculator(label, output, mode):
     
     metric = "Total Sleep"
     
-    df = pd.read_csv(label+' Roenneberg.csv')
-    df_o = pd.read_csv(label+' Onsets+Offsets.csv')
     file = open(label+' '+metric+'.csv', 'w')
     file.write("DATE,DAY,TOTAL SLEEP\n")
+    
+    if (mode == "R"):
+        df = pd.read_csv(label+' Roenneberg.csv')
+    elif (mode == "CK"):
+        df = pd.read_csv(label+' Cole-Kripke.csv')
+    else:
+        df = pd.read_csv(label+' Sadeh.csv')
+        
+    df_o = pd.read_csv(label+' Onsets+Offsets.csv')
+    # onsets/offsets used to determine which days do or don't have defined sleep
     
     for i in range(len(df)//1440):
         if (':' in str(df_o['ONSET_TIME'][i])):
@@ -30,7 +38,7 @@ def total_sleep_calculator(label, output):
                 counter = counter + df['SLEEP'][1440*i+j]
             file.write(df['DATE'][1440*i]+','+str(i+1)+','+str(counter)+'\n')
         else:
-            file.write(df['DATE'][1440*i]+','+str(i+1)+',N/A\n')
+            file.write(df['DATE'][1440*i]+','+str(i+1)+',N/A\n')     
     
     file.close()
     

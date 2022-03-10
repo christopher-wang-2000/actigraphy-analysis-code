@@ -15,11 +15,16 @@ import numpy as np
 import scipy
 import matplotlib.pyplot as plt
 
-def sri_calculator(label, output, binsize):
+def sri_calculator(label, output, binsize, mode):
     
     metric = "SRI"
     
-    df = pd.read_csv(label+' Cole-Kripke.csv')
+    if (mode == "R"):
+        df = pd.read_csv(label+' Roenneberg.csv')
+    elif (mode == "CK"):
+        df = pd.read_csv(label+' Cole-Kripke.csv')
+    else:
+        df = pd.read_csv(label+' Sadeh.csv')
     file = open(label+' '+metric+'.csv', 'w')
     file.write("DATE,DAY,SRI\n")
     
