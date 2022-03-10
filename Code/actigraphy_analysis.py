@@ -176,9 +176,9 @@ for filename in fileList:
     # run all analyses on each given file
     # IV, M10, and IS are calculated to include the entire window of the active period
     # sleep metrics are calculated to include the entire window of the sleep period
-    #iv.iv_calculator(label, df1, output, filtereddays)
-    #m10.m10_calculator(label, df1, output, filtereddays)
-    #is_calc.is_calculator(label, df1, output, binsize, filtereddays)
+    iv.iv_calculator(label, df1, output, filtereddays)
+    m10.m10_calculator(label, df1, output, filtereddays)
+    is_calc.is_calculator(label, df1, output, binsize, filtereddays)
     awd.awd_converter(label, df2)
     rb.rb_calculator(label, df2)
     ck.ck_calculator(label, df2)
